@@ -80,6 +80,7 @@ else
 fi
 
 function history() {
+  >&2 echo "Querying covid-19 case counts for $TARGET $CITY after $START"
   for i in $(seq 1 $DAYS);
   do
     DATE="$(date -d "$START $i days" +%m-%d-%Y)";
