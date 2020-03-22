@@ -1,0 +1,93 @@
+#!/bin/bash
+
+TARGET=""
+CITY=""
+START=""
+DAYS=""
+CMD="history"
+
+printhelp () {
+
+  cat <<'EOF'
+export-counts
+-c|--city "Michigan"
+-s|--start "2020-03-10"
+-d|--days 8 - number of days ago. Defaults to 8
+-h|--help - print this help
+-l|--list - just output the raw csv for today
+EOF
+}
+
+listcsv() {
+  DATE="$1"
+  curl -k "https://nssac.bii.virginia.edu/covid-19/dashboard/data/nssac-ncov-sd-$DATE.csv" 2>/dev/null
+}
+
+
+while test $# -gt 0
+do
+  case "$1" in
+    -c | --city)
+      CITY="$2"
+      shift 2
+    ;;
+    -s | --start)
+      START="$2"
+      shift 2
+    ;;
+    -d | --days)
+      DAYS="$2"
+      shift 2
+    ;;
+    -h | --help)
+      printhelp
+      exit 0;
+    ;;
+    list)
+       shift;
+       CMD="list"
+    ;;
+    *)
+      if [ ! -z "$TARGET" ]; then >&2 echo "unknown arg $1"; exit 1; fi
+      TARGET="$1"
+      shift
+    ;;
+  esac
+done
+
+if [ -z "$TARGET" ]; then TARGET="Michigan"; fi
+
+if [ ! -z "$START" ]; then
+  DAYS="$((($(date +%s)-$(date +%s --date "$START"))/(3600*24)))"
+else
+  if [ -z "$DAYS" ]; then
+    case $CMD in
+      list) DAYS="0" ;;
+      *) DAYS="8" ;;
+    esac
+  fi
+  START="$(date -d "$date -$DAYS days" +%Y-%m-%d)"
+fi
+
+function history() {
+  for i in $(seq 1 $DAYS);
+  do
+    DATE="$(date -d "$START $i days" +%m-%d-%Y)";
+    echo $DATE
+    if [ ! -z "$CITY" ]
+    then
+      listcsv $DATE | grep "$TARGET" | awk -F, '{ print $3}' | tr ';' '\n' | grep -F "$CITY"
+    else
+      listcsv $DATE | grep "$TARGET"| awk -F, '{ print $4}'
+    fi
+  done;
+}
+
+function list() {
+  listcsv $(date -d "$START" +%m-%d-%Y) | awk -F, '{print $1,$2,$4,$5,$6,$3}' OFS=, | column -s, -t | less -#2 -N -S
+}
+
+case "$CMD" in
+  history) history ;;
+  list) list ;;
+esac
