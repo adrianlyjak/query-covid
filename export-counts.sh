@@ -8,13 +8,19 @@ CMD="history"
 
 printhelp () {
 
-  cat <<'EOF'
-export-counts
--c|--city "Michigan"
--s|--start "2020-03-10"
--d|--days 8 - number of days ago. Defaults to 8
--h|--help - print this help
--l|--list - just output the raw csv for today
+  cat <<EOF
+Script to query nssav-ncov-sd csv data on covid-19 
+usage:
+$0
+Options:
+-c|--city   - "Michigan"
+-s|--start  - "2020-03-10"
+-d|--days 8 - number of days ago. Defaults to 8, (or 0 if listing the csv)
+-h|--help   - print this help
+
+Commands
+list        - just output the raw csv for today
+history     - show history for a specific country/state/city
 EOF
 }
 
@@ -43,6 +49,8 @@ do
       printhelp
       exit 0;
     ;;
+    history)
+       shift;
     list)
        shift;
        CMD="list"
