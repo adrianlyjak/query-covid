@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.ts"],"names":[],"mappings":";;AAAA,IAAM,SAAS,GAAG,QAAQ,CAAC,aAAT,CAAuB,KAAvB,CAAlB;AACA,QAAQ,CAAC,IAAT,CAAc,WAAd,CAA0B,SAA1B","file":"src.77de5100.js","sourceRoot":"../src","sourcesContent":["const container = document.createElement(\"div\");\ndocument.body.appendChild(container);\n"]}

@@ -1,0 +1,22 @@
+// Place your settings in this file to overwrite the default settings
+{
+  "mocha.requires": ["ts-node/register"],
+  "mocha.options": {
+    "timeout": "180000"
+  },
+  "mocha.files.glob": "src/**/*.spec.[j|t]s",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // mocha test explorer
+  "mochaExplorer.files": "src/**/*.spec.[j|t]s",
+  "mochaExplorer.timeout": 30000,
+  "mochaExplorer.require": "ts-node/register",
+  "mochaExplorer.debuggerPort": 9229,
+  "mochaExplorer.exit": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
