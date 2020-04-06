@@ -7,7 +7,7 @@
     "start": "npx concurrently --kill-others -c cyan,magenta \"npm:server\" \"npm:client\"",
     "client": "npx parcel src/client/index.html",
     "server": "npx ts-node-dev --respawn --ignore-watch node_modules src/server/server.ts",
-    "dailyupdate": "npx ts-node scripts/load-nyt-data.ts"
+    "fetch": "npx ts-node scripts/load-nyt-data.ts; npx ts-node scripts/load-static-data.ts"
   },
   "repository": {
     "type": "git",
