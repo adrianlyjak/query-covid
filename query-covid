@@ -5,6 +5,7 @@ CITY=""
 START=""
 DAYS=""
 CMD="history"
+DEATHS=0
 
 printhelp () {
 
@@ -19,6 +20,7 @@ history     - show history for a specific country/state/city
 Options:
 -c|--city   - "Michigan"
 -s|--start  - "2020-03-10"
+--deaths    - show death numbers instead of case numbers
 -d|--days 8 - number of days ago. Defaults to 8, (or 0 if listing the csv)
 -h|--help   - print this help
 
@@ -37,6 +39,10 @@ do
     -c | --city)
       CITY="$2"
       shift 2
+    ;;
+    --deaths)
+      DEATHS=1
+      shift
     ;;
     -s | --start)
       START="$2"
@@ -80,6 +86,7 @@ else
 fi
 
 function history() {
+  LAST=""
   >&2 echo "Querying covid-19 case counts for $TARGET $CITY after $START"
   for i in $(seq 1 $DAYS);
   do
@@ -87,10 +94,21 @@ function history() {
     echo $DATE
     if [ ! -z "$CITY" ]
     then
-      listcsv $DATE | grep "$TARGET" | awk -F, '{ print $3}' | tr ';' '\n' | grep -F "$CITY"
+      COUNT="$(listcsv $DATE | grep "$TARGET" | awk -F, '{ print $3}' | tr ';' '\n' | grep -F "$CITY" | awk '{ print $2 }')"
     else
-      listcsv $DATE | grep "$TARGET"| awk -F, '{ print $4}'
+      if [ "$DEATHS" -gt 0 ]; then PRINT='{ print $5 }'; else PRINT='{ print $4 }'; fi
+      COUNT="$(listcsv $DATE | grep "$TARGET"| head -n 1 | awk -F, "$PRINT")"
     fi
+    PLUS_MINUS=""
+    if [ ! -z "$LAST" ]; then
+      PLUS_MINUS="$((COUNT - LAST))"
+      if [ "$PLUS_MINUS" -gt -1 ]; then
+        PLUS_MINUS="+$PLUS_MINUS"
+      fi
+
+    fi
+    LAST="$COUNT"
+    echo "$COUNT" "$PLUS_MINUS"
   done;
 }
 

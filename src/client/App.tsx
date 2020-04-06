@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { fetchDay, fetchTimeseriesDeaths } from "./data/dataloader";
+import React from "react";
+import CountyMap from "./widgets/CountyMap";
+import "leaflet/dist/leaflet.css";
+import { CountyExplorerStoreProvider } from "./stores/AppStateProvider";
+import CountyDetails from "./widgets/CountyDetails";
 
 function App(props: any) {
-  const [data, setData] = useState();
-  useEffect(() => {
-    const runAsync = async () => {
-      setData(await fetchTimeseriesDeaths());
-    };
-    runAsync();
-  }, []);
-  console.log("I am data", data);
-  return <span>I am app</span>;
+  return (
+    <CountyExplorerStoreProvider>
+      <div style={{ display: "flex", height: "100%", flexDirection: "row" }}>
+        <div style={{ flex: 2 }}>
+          <CountyMap />
+        </div>
+        <div style={{ flex: 1 }}>
+          <CountyDetails />
+        </div>
+      </div>
+    </CountyExplorerStoreProvider>
+  );
 }
 
 export default App;
