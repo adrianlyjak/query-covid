@@ -43,7 +43,7 @@
     "express": "^4.17.1",
     "express-http-proxy": "^1.6.0",
     "express-promise-router": "^3.0.3",
-    "highcharts": "^8.0.4",
+    "highcharts": "^9.0.0",
     "leaflet": "^1.6.0",
     "moment": "^2.24.0",
     "papaparse": "^5.1.1",
