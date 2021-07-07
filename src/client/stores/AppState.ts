@@ -1,6 +1,7 @@
 import { FeatureCollection } from "geojson";
 import { CountyDatum, groupedByFips } from "../data/nyt";
 import React, { useContext, useState, Children } from "react";
+import moment from "moment";
 
 export interface CountyExplorerState {
   days: Date[];
@@ -70,9 +71,10 @@ export class CountyExplorerStore {
   }
 
   selectDate(date: string): void {
+    const selections = deriveSelections(date);
     this.setState({
       selectedDate: date,
-      selections: deriveSelections(date),
+      selections: selections,
     });
   }
 
@@ -86,6 +88,19 @@ export class CountyExplorerStore {
 
   getCountyByFips(fips: string): CountyHistory | undefined {
     return this.state.selections[fips];
+  }
+
+  tickDate() {
+    const start = moment("2020-03-10");
+    let date = this.state.selectedDate
+      ? moment(this.state.selectedDate)
+      : start;
+    const end = moment();
+    date = date.add(1, "day");
+    if (date.isAfter(end)) {
+      date = moment(start);
+    }
+    this.selectDate(date.format("YYYY-MM-DD"));
   }
 }
 

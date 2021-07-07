@@ -17,7 +17,7 @@ export default function CountyDetails(props: any) {
       {countyStore.state.selectedCountyData && (
         <CountyChart county={countyStore.state.selectedCountyData} />
       )}
-      {/* {JSON.stringify(countyStore.state.selectedCountyData, undefined, 2)} */}
+      {JSON.stringify(countyStore.state.selectedCountyData, undefined, 2)}
     </pre>
   );
 }

@@ -10,20 +10,6 @@ import moment from "moment";
 export default function CountyMap(props: {}): React.ReactElement {
   const store = useContext(CountyExplorerContext);
 
-  useEffect(() => {
-    const start = moment("2020-03-10");
-    let date = moment(start);
-    const end = moment();
-    const timer = setInterval(() => {
-      console.log("set stuff");
-      store.selectDate(date.format("YYYY-MM-DD"));
-      date = date.add(1, "day");
-      if (date.isAfter(end)) {
-        date = moment(start);
-      }
-    }, 500);
-  }, []);
-
   const countyStyle: StyleFunction<GeoJSON.Feature> = (
     elem: GeoJSON.Feature | undefined
   ): PathOptions => {
